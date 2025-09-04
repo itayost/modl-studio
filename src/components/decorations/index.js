@@ -1,0 +1,8 @@
+export { default as PaperClip } from './PaperClip'
+export { default as PushPin } from './PushPin'
+export { default as WashiTape } from './WashiTape'
+export { default as Stamp } from './Stamp'
+export { default as HandwrittenNote } from './HandwrittenNote'
+export { default as DateStamp } from './DateStamp'
+export { default as AlbumCorner } from './AlbumCorner'
+export { default as DecorativeDoodle } from './DecorativeDoodle'
