@@ -74,11 +74,11 @@ const Hero = () => {
             <h1 className={`text-4xl md:text-6xl font-bold mb-4 leading-tight text-brown transition-all duration-700 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}>
-              צרי חלל 
+              צרו חלל 
               <span className={`block text-3xl md:text-5xl mt-2 text-gold transition-all duration-700 delay-100 ${
                 isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
               }`}>
-                ייחודי משלך
+                ייחודי משלכם
               </span>
             </h1>
             

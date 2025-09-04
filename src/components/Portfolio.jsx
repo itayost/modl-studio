@@ -9,22 +9,14 @@ import { useScrollAnimation, useStaggerAnimation } from '../hooks/useScrollAnima
 const Portfolio = () => {
   const tiltAngles = useTiltAngles(portfolio.length)
   const [selectedImage, setSelectedImage] = useState(null)
-  const [filter, setFilter] = useState('all')
 
   // Scroll animations
   const { ref: titleRef, isInView: titleInView } = useScrollAnimation()
-  const { ref: filtersRef, isInView: filtersInView } = useScrollAnimation({ delay: 200 })
   const { ref: gridRef, childrenInView } = useStaggerAnimation({ 
     staggerDelay: 100,
     initialDelay: 400,
     threshold: 0.05
   })
-
-  const filters = ['all', 'מגורים', 'מסחרי', 'יוקרה', 'השקעה']
-  
-  const filteredPortfolio = filter === 'all' 
-    ? portfolio 
-    : portfolio.filter(item => item.type === filter)
 
   return (
     <section id="portfolio" className="py-16 md:py-20 px-4 relative overflow-hidden">
@@ -45,37 +37,12 @@ const Portfolio = () => {
           הפרויקטים שלנו
         </h2>
         
-        {/* Mobile-friendly filter buttons with animation */}
-        <div 
-          ref={filtersRef}
-          className={`flex flex-wrap justify-center gap-2 mb-8 animate-fade-up ${
-            filtersInView ? 'in-view' : ''
-          }`}
-        >
-          {filters.map((filterOption, index) => (
-            <button
-              key={filterOption}
-              onClick={() => setFilter(filterOption)}
-              className={`px-4 py-2 rounded-full text-sm transition-all transform ${
-                filter === filterOption
-                  ? 'bg-gold text-white scale-110 shadow-lg'
-                  : 'bg-light-cream text-brown hover:bg-gold/20 hover:scale-105'
-              } ${filtersInView ? `animation-delay-${index * 100}` : ''}`}
-              style={{
-                transitionDelay: filtersInView ? `${index * 50}ms` : '0ms'
-              }}
-            >
-              {filterOption}
-            </button>
-          ))}
-        </div>
-        
         {/* Portfolio grid with stagger animations */}
         <div 
           ref={gridRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
-          {filteredPortfolio.map((item, index) => {
+          {portfolio.map((item, index) => {
             const isCardInView = childrenInView.includes(index)
             
             // Varied animation patterns
