@@ -1,3 +1,4 @@
+// components/common/PolaroidCard.jsx
 import React from 'react'
 import { 
   PaperClip, 
@@ -18,12 +19,24 @@ const PolaroidCard = ({
   hasStamp = false,
   stampType = 'default',
   note = '',
-  date = ''
+  date = '',
+  noBackground = false, // New prop to disable background for flip containers
+  noTransform = false,  // New prop to disable transform for flip containers
+  onClick
 }) => {
+  const baseClasses = noBackground 
+    ? "p-1 md:p-2 shadow-lg transition-all duration-300 relative" 
+    : "polaroid"
+    
+  const style = noTransform 
+    ? {} 
+    : { transform: `rotate(${tilt}deg)` }
+  
   return (
     <div 
-      className={`polaroid ${className}`} 
-      style={{ transform: `rotate(${tilt}deg)` }}
+      className={`${baseClasses} ${className}`} 
+      style={style}
+      onClick={onClick}
     >
       {hasClip && <PaperClip />}
       {hasPin && <PushPin />}

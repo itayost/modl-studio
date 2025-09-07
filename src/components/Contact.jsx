@@ -1,48 +1,47 @@
 // src/components/Contact.jsx
-import React, { useState } from 'react'
-import { Phone, Mail, Clock, MapPin, Send, MessageCircle, Award, Heart, Sparkles } from 'lucide-react'
+import React from 'react'
+import { Phone, Mail, Clock, MapPin, MessageCircle, Award, Heart, Sparkles, Instagram, Facebook } from 'lucide-react'
 import { contactInfo } from '../utils/constants'
 import { useScrollAnimation, useStaggerAnimation } from '../hooks/useScrollAnimation'
 import limorImage from '../assets/images/limor.jpg'
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '', phone: '', email: '', message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
   // Scroll animations
   const { ref: titleRef, isInView: titleInView } = useScrollAnimation()
   const { ref: cardsRef, childrenInView: cardsInView } = useStaggerAnimation({ 
     staggerDelay: 100,
     initialDelay: 200
   })
-  const { ref: formRef, isInView: formInView } = useScrollAnimation({ delay: 400 })
-  const { ref: designerRef, isInView: designerInView } = useScrollAnimation({ delay: 600 })
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    // Simulate form submission with animation
-    setTimeout(() => {
-      alert('תודה על פנייתך! נחזור אליך בהקדם.')
-      setFormData({ name: '', phone: '', email: '', message: '' })
-      setIsSubmitting(false)
-    }, 1000)
-  }
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+  const { ref: designerRef, isInView: designerInView } = useScrollAnimation({ delay: 400 })
+  const { ref: ctaRef, isInView: ctaInView } = useScrollAnimation({ delay: 600 })
 
   const contactCards = [
-    { icon: Phone, title: 'טלפון', info: contactInfo.phone, link: `tel:${contactInfo.phone}` },
-    { icon: Mail, title: 'אימייל', info: contactInfo.email, link: `mailto:${contactInfo.email}` },
-    { icon: Clock, title: 'שעות', info: contactInfo.hours },
-    { icon: MapPin, title: 'מיקום', info: 'תל אביב' }
+    { 
+      icon: Phone, 
+      title: 'טלפון', 
+      info: contactInfo.phone, 
+      link: `tel:${contactInfo.phone}`,
+      cta: 'התקשרו עכשיו'
+    },
+    { 
+      icon: Mail, 
+      title: 'אימייל', 
+      info: contactInfo.email, 
+      link: `mailto:${contactInfo.email}`,
+      cta: 'שלחו מייל'
+    },
+    { 
+      icon: Clock, 
+      title: 'שעות פעילות', 
+      info: contactInfo.hours,
+      cta: 'זמינים עבורכם'
+    },
+    { 
+      icon: MapPin, 
+      title: 'מיקום', 
+      info: 'תל אביב',
+      cta: 'ניתן לתאם פגישה'
+    }
   ]
 
   return (
@@ -64,7 +63,7 @@ const Contact = () => {
           צרו קשר
         </h2>
         
-        {/* Contact cards with stagger animation */}
+        {/* Contact cards with enhanced design */}
         <div 
           ref={cardsRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
@@ -77,139 +76,123 @@ const Contact = () => {
               <a 
                 key={index}
                 href={item.link || '#'}
-                className={`bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-2 text-center group animate-scale-in ${
+                className={`bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-2 text-center group animate-scale-in relative overflow-hidden ${
                   isCardInView ? 'in-view' : ''
                 }`}
               >
-                <div className={`transition-all duration-500 ${
+                {/* Background decoration on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-light-gold/0 to-light-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className={`relative transition-all duration-500 ${
                   isCardInView ? 'animate-bounce-in' : ''
                 }`}>
-                  <Icon className="w-8 h-8 text-gold mb-3 mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-300" />
+                  <Icon className="w-10 h-10 text-gold mb-3 mx-auto group-hover:scale-125 group-hover:rotate-12 transition-all duration-300" />
                 </div>
                 <h3 className={`font-bold text-brown mb-2 transition-all duration-300 ${
                   isCardInView ? 'opacity-100' : 'opacity-0'
                 }`}>
                   {item.title}
                 </h3>
-                <p className={`text-brown/80 text-sm transition-all duration-500 ${
+                <p className={`text-brown/80 text-sm mb-3 transition-all duration-500 ${
                   isCardInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
                 }`}>
                   {item.info}
                 </p>
+                {item.cta && (
+                  <span className="text-xs text-gold font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {item.cta}
+                  </span>
+                )}
               </a>
             )
           })}
         </div>
 
-        {/* Main content area with form and designer profile */}
+        {/* Main content area with CTA and designer profile */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Form - Takes 2 columns on large screens */}
+          {/* Enhanced CTA Section - Takes 2 columns on large screens */}
           <div 
-            ref={formRef}
-            className={`lg:col-span-2 bg-white p-6 md:p-8 rounded-lg shadow-lg relative animate-fade-up ${
-              formInView ? 'in-view' : ''
+            ref={ctaRef}
+            className={`lg:col-span-2 bg-gradient-to-br from-light-cream to-white p-8 md:p-12 rounded-lg shadow-xl relative animate-fade-up ${
+              ctaInView ? 'in-view' : ''
             }`}
           >
             {/* Animated sticky note */}
             <div 
-              className={`absolute -top-4 right-4 md:right-8 bg-light-gold px-3 py-2 transform shadow-md transition-all duration-700 ${
-                formInView ? '-rotate-3 scale-100' : 'rotate-45 scale-0'
+              className={`absolute -top-4 right-4 md:right-8 bg-gold px-4 py-2 transform shadow-md transition-all duration-700 ${
+                ctaInView ? '-rotate-3 scale-100' : 'rotate-45 scale-0'
               }`}
               style={{ 
                 fontFamily: 'Caveat, cursive', 
-                fontSize: '1.1rem', 
-                color: '#7d5a50',
+                fontSize: '1.2rem', 
+                color: 'white',
                 transitionDelay: '500ms'
               }}
             >
               בואו נעצב יחד!
             </div>
             
-            <h3 className="text-xl font-bold text-brown mb-6">שלחו הודעה</h3>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className={`transition-all duration-500 ${
-                  formInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                }`} style={{ transitionDelay: formInView ? '600ms' : '0ms' }}>
-                  <label className="block text-brown font-medium mb-2 text-sm">שם מלא</label>
-                  <input 
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-light-cream rounded-lg focus:border-gold focus:outline-none transition-all focus:scale-105 text-sm"
-                    placeholder="הכנס את שמך"
-                    required
-                  />
-                </div>
-                
-                <div className={`transition-all duration-500 ${
-                  formInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                }`} style={{ transitionDelay: formInView ? '700ms' : '0ms' }}>
-                  <label className="block text-brown font-medium mb-2 text-sm">טלפון</label>
-                  <input 
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border-2 border-light-cream rounded-lg focus:border-gold focus:outline-none transition-all focus:scale-105 text-sm"
-                    placeholder="050-0000000"
-                    required
-                  />
-                </div>
-              </div>
+            <div className="text-center">
+              <h3 className="text-2xl md:text-3xl font-bold text-brown mb-4">
+                מוכנים להתחיל את הפרויקט שלכם?
+              </h3>
               
-              <div className={`transition-all duration-500 ${
-                formInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`} style={{ transitionDelay: formInView ? '800ms' : '0ms' }}>
-                <label className="block text-brown font-medium mb-2 text-sm">אימייל</label>
-                <input 
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-light-cream rounded-lg focus:border-gold focus:outline-none transition-all focus:scale-105 text-sm"
-                  placeholder="your@email.com"
-                  required
-                />
+              <p className="text-brown/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+                אנחנו כאן כדי להפוך את החלום שלכם למציאות. 
+                צרו איתנו קשר היום ונתחיל יחד במסע העיצובי שיהפוך את הבית שלכם למקום מושלם.
+              </p>
+
+              {/* Primary CTAs */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                <a 
+                  href={`tel:${contactInfo.phone}`}
+                  className="btn-primary flex items-center justify-center gap-2 text-lg hover:scale-105 transition-transform"
+                >
+                  <Phone size={20} />
+                  התקשרו עכשיו
+                </a>
+                <a 
+                  href={`https://wa.me/${contactInfo.whatsapp}`}
+                  className="btn-secondary flex items-center justify-center gap-2 text-lg hover:scale-105 transition-transform"
+                >
+                  <MessageCircle size={20} />
+                  שלחו וואטסאפ
+                </a>
               </div>
-              
-              <div className={`transition-all duration-500 ${
-                formInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`} style={{ transitionDelay: formInView ? '900ms' : '0ms' }}>
-                <label className="block text-brown font-medium mb-2 text-sm">הודעה</label>
-                <textarea 
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border-2 border-light-cream rounded-lg focus:border-gold focus:outline-none transition-all focus:scale-105 min-h-[120px] resize-y text-sm"
-                  placeholder="ספרו לנו על הפרויקט שלכם..."
-                  required
-                />
+
+              {/* Social Media Links */}
+              <div className="flex justify-center gap-6 pt-6 border-t border-brown/10">
+                <a 
+                  href="#" 
+                  className="text-brown/60 hover:text-gold transition-colors hover:scale-125 transform duration-300"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={24} />
+                </a>
+                <a 
+                  href="#" 
+                  className="text-brown/60 hover:text-gold transition-colors hover:scale-125 transform duration-300"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={24} />
+                </a>
+                <a 
+                  href={`mailto:${contactInfo.email}`}
+                  className="text-brown/60 hover:text-gold transition-colors hover:scale-125 transform duration-300"
+                  aria-label="Email"
+                >
+                  <Mail size={24} />
+                </a>
               </div>
-              
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className={`w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 transition-all duration-500 ${
-                  formInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                } ${isSubmitting ? 'animate-pulse' : 'hover:scale-105'}`}
-                style={{ transitionDelay: formInView ? '1000ms' : '0ms' }}
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                    <span>שולח...</span>
-                  </div>
-                ) : (
-                  <>
-                    <Send size={18} className="hover:rotate-45 transition-transform duration-300" />
-                    שלח הודעה
-                  </>
-                )}
-              </button>
-            </form>
+
+              {/* Special Offer Banner */}
+              <div className="mt-8 p-4 bg-white/70 rounded-lg border-2 border-gold/30">
+                <Sparkles className="text-gold mx-auto mb-2" size={24} />
+                <p className="text-sm text-brown font-medium">
+                  ייעוץ ראשוני חינם למתקשרים השבוע!
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Meet Your Designer Card */}
@@ -237,7 +220,7 @@ const Contact = () => {
                 המעצבת שלכם
               </h3>
               
-              <p className="text-sm text-brown/80 leading-relaxed text-center">
+              <p className="text-sm text-brown/80 leading-relaxed text-center italic">
                 "אני מאמינה שכל בית צריך לספר את הסיפור של האנשים שגרים בו. 
                 עם ניסיון של למעלה מ-10 שנים, אני כאן להפוך את החלום שלכם למציאות."
               </p>
@@ -258,9 +241,17 @@ const Contact = () => {
                 </div>
               </div>
 
+              {/* Direct Contact Button */}
+              <a 
+                href={`tel:${contactInfo.phone}`}
+                className="w-full btn-primary text-center mt-4 hover:scale-105 transition-transform"
+              >
+                דברו איתי ישירות
+              </a>
+
               {/* Handwritten note */}
               <div 
-                className="text-center pt-4"
+                className="text-center pt-2"
                 style={{ 
                   fontFamily: 'Caveat, cursive', 
                   fontSize: '1.2rem', 
